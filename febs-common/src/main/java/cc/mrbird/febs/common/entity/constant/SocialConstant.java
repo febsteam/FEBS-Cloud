@@ -13,7 +13,10 @@ public class SocialConstant {
      * @return
      */
     public static String getSocialLoginPassword() {
-        return threadLocal.get();
+        String password = threadLocal.get();
+        //防止内存泄漏
+        threadLocal.remove();
+        return password;
     }
 
     /**
@@ -22,7 +25,5 @@ public class SocialConstant {
      */
     public static void setSocialLoginPassword(String socialLoginPassword) {
         threadLocal.set(socialLoginPassword);
-        //防止内存泄漏
-        threadLocal.remove();
     }
 }
