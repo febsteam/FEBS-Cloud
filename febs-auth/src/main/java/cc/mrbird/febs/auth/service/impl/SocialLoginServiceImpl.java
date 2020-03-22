@@ -13,6 +13,7 @@ import cc.mrbird.febs.common.entity.constant.SocialConstant;
 import cc.mrbird.febs.common.entity.system.SystemUser;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.FebsUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.RequiredArgsConstructor;
@@ -202,8 +203,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         Map<String, String> requestParameters = new HashMap<>(5);
         requestParameters.put(ParamsConstant.GRANT_TYPE, GrantTypeConstant.PASSWORD);
         requestParameters.put(USERNAME, user.getUsername());
-        requestParameters.put(PASSWORD, SocialConstant.SOCIAL_LOGIN_PASSWORD);
-
+        String pwd = RandomUtil.randomString(16);
+        SocialConstant.setSocialLoginPassword(pwd);
+        requestParameters.put(PASSWORD, pwd);
         String grantTypes = String.join(",", clientDetails.getAuthorizedGrantTypes());
         TokenRequest tokenRequest = new TokenRequest(requestParameters, clientDetails.getClientId(), clientDetails.getScope(), grantTypes);
         return granter.grant(GrantTypeConstant.PASSWORD, tokenRequest);

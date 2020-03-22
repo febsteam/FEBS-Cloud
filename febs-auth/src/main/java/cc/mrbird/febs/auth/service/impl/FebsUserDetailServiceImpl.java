@@ -41,7 +41,7 @@ public class FebsUserDetailServiceImpl implements UserDetailsService {
             String password = systemUser.getPassword();
             String loginType = (String) httpServletRequest.getAttribute(ParamsConstant.LOGIN_TYPE);
             if (StringUtils.equals(loginType, SocialConstant.SOCIAL_LOGIN)) {
-                password = passwordEncoder.encode(SocialConstant.SOCIAL_LOGIN_PASSWORD);
+                password = passwordEncoder.encode(SocialConstant.getSocialLoginPassword());
             }
             FebsAuthUser authUser = new FebsAuthUser(systemUser.getUsername(), password, true, true, true, notLocked,
                     AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
