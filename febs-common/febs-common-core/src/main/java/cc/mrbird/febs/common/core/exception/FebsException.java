@@ -5,7 +5,7 @@ package cc.mrbird.febs.common.core.exception;
  *
  * @author MrBird
  */
-public class FebsException extends Exception {
+public class FebsException extends RuntimeException {
 
     private static final long serialVersionUID = -6916154462432027437L;
 

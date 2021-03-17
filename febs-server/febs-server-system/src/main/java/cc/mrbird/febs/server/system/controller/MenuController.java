@@ -35,7 +35,7 @@ public class MenuController {
 
     @GetMapping("/{username}")
     public FebsResponse getUserRouters(@NotBlank(message = "{required}") @PathVariable String username) {
-        Map<String, Object> result = new HashMap<>(2);
+        Map<String, Object> result = new HashMap<>(4);
         List<VueRouter<Menu>> userRouters = this.menuService.getUserRouters(username);
         String userPermissions = this.menuService.findUserPermissions(username);
         String[] permissionArray = new String[0];

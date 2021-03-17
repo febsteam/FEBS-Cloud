@@ -1,5 +1,6 @@
 package cc.mrbird.febs.common.security.starter.configure;
 
+import cc.mrbird.febs.common.core.entity.constant.EndpointConstant;
 import cc.mrbird.febs.common.core.entity.constant.StringConstant;
 import cc.mrbird.febs.common.security.starter.handler.FebsAccessDeniedHandler;
 import cc.mrbird.febs.common.security.starter.handler.FebsAuthExceptionEntryPoint;
@@ -25,28 +26,35 @@ public class FebsCloudResourceServerConfigure extends ResourceServerConfigurerAd
     private FebsAccessDeniedHandler accessDeniedHandler;
     private FebsAuthExceptionEntryPoint exceptionEntryPoint;
 
-    @Autowired
+    @Autowired(required = false)
     public void setProperties(FebsCloudSecurityProperties properties) {
         this.properties = properties;
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setAccessDeniedHandler(FebsAccessDeniedHandler accessDeniedHandler) {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setExceptionEntryPoint(FebsAuthExceptionEntryPoint exceptionEntryPoint) {
         this.exceptionEntryPoint = exceptionEntryPoint;
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        if (properties == null) {
+            permitAll(http);
+            return;
+        }
         String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(properties.getAnonUris(), StringConstant.COMMA);
         if (ArrayUtils.isEmpty(anonUrls)) {
             anonUrls = new String[]{};
         }
-
+        if (ArrayUtils.contains(anonUrls, EndpointConstant.ALL)) {
+            permitAll(http);
+            return;
+        }
         http.csrf().disable()
                 .requestMatchers().antMatchers(properties.getAuthUri())
                 .and()
@@ -59,7 +67,16 @@ public class FebsCloudResourceServerConfigure extends ResourceServerConfigurerAd
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.authenticationEntryPoint(exceptionEntryPoint)
-                .accessDeniedHandler(accessDeniedHandler);
+        if (exceptionEntryPoint != null) {
+            resources.authenticationEntryPoint(exceptionEntryPoint);
+        }
+        if (accessDeniedHandler != null) {
+            resources.accessDeniedHandler(accessDeniedHandler);
+        }
+    }
+
+    private void permitAll(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests().anyRequest().permitAll();
     }
 }

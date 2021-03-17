@@ -7,6 +7,8 @@ import cc.mrbird.febs.common.core.entity.constant.StringConstant;
 import cc.mrbird.febs.common.core.entity.router.RouterMeta;
 import cc.mrbird.febs.common.core.entity.router.VueRouter;
 import cc.mrbird.febs.common.core.entity.system.Menu;
+import cc.mrbird.febs.common.core.exception.FebsException;
+import cc.mrbird.febs.common.core.utils.FebsUtil;
 import cc.mrbird.febs.common.core.utils.TreeUtil;
 import cc.mrbird.febs.server.system.mapper.MenuMapper;
 import cc.mrbird.febs.server.system.service.IMenuService;
@@ -32,18 +34,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public String findUserPermissions(String username) {
+        checkUser(username);
         List<Menu> userPermissions = this.baseMapper.findUserPermissions(username);
         return userPermissions.stream().map(Menu::getPerms).collect(Collectors.joining(StringConstant.COMMA));
     }
 
     @Override
     public List<Menu> findUserMenus(String username) {
+        checkUser(username);
         return this.baseMapper.findUserMenus(username);
     }
 
     @Override
     public Map<String, Object> findMenus(Menu menu) {
-        Map<String, Object> result = new HashMap<>(2);
+        Map<String, Object> result = new HashMap<>(4);
         try {
             LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.orderByAsc(Menu::getOrderNum);
@@ -70,6 +74,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public List<VueRouter<Menu>> getUserRouters(String username) {
+        checkUser(username);
         List<VueRouter<Menu>> routes = new ArrayList<>();
         List<Menu> menus = this.findUserMenus(username);
         menus.forEach(menu -> {
@@ -156,6 +161,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
             List<String> menuIdList = new ArrayList<>();
             menus.forEach(m -> menuIdList.add(String.valueOf(m.getMenuId())));
             this.delete(menuIdList);
+        }
+    }
+
+    private void checkUser(String username) {
+        String currentUsername = FebsUtil.getCurrentUsername();
+        if (StringUtils.isNotBlank(currentUsername)
+                && !StringUtils.equalsIgnoreCase(currentUsername, username)) {
+            throw new FebsException("无权获取别的用户数据");
         }
     }
 

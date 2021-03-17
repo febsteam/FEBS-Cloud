@@ -183,7 +183,7 @@ public abstract class FebsUtil {
      * @return Map<String, Object>
      */
     public static Map<String, Object> getDataTable(IPage<?> pageInfo) {
-        Map<String, Object> data = new HashMap<>(2);
+        Map<String, Object> data = new HashMap<>(4);
         data.put(PageConstant.ROWS, pageInfo.getRecords());
         data.put(PageConstant.TOTAL, pageInfo.getTotal());
         return data;

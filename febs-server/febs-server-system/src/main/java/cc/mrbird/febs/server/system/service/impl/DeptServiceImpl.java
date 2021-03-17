@@ -37,7 +37,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
 
     @Override
     public Map<String, Object> findDepts(QueryRequest request, Dept dept) {
-        Map<String, Object> result = new HashMap<>(2);
+        Map<String, Object> result = new HashMap<>(4);
         try {
             List<Dept> depts = findDepts(dept, request);
             List<DeptTree> trees = new ArrayList<>();
