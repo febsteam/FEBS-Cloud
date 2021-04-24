@@ -48,9 +48,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 validateCode(httpServletRequest);
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             } catch (Exception e) {
-                FebsResponse febsResponse = new FebsResponse();
-                FebsUtil.makeFailureResponse(httpServletResponse, febsResponse.message(e.getMessage()));
-                log.error(e.getMessage(), e);
+                FebsUtil.makeFailureResponse(httpServletResponse, HttpServletResponse.SC_BAD_REQUEST, new FebsResponse().message(e.getMessage()));
+                log.error(e.getMessage());
             }
         } else {
             filterChain.doFilter(httpServletRequest, httpServletResponse);

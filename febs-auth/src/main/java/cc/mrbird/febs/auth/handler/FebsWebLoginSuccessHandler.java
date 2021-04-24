@@ -36,7 +36,7 @@ public class FebsWebLoginSuccessHandler extends SavedRequestAwareAuthenticationS
         if (FebsUtil.isAjaxRequest(request)) {
             FebsResponse data = new FebsResponse();
             if (savedRequest == null) {
-                FebsUtil.makeFailureResponse(response, data.message("请通过授权码模式跳转到该页面"));
+                FebsUtil.makeFailureResponse(response, HttpServletResponse.SC_UNAUTHORIZED, data.message("请通过授权码模式跳转到该页面"));
                 return;
             }
             data.data(savedRequest.getRedirectUrl());

@@ -21,53 +21,55 @@ public class FebsWebResponseExceptionTranslator implements WebResponseExceptionT
 
     @Override
     public ResponseEntity<?> translate(Exception e) {
-        ResponseEntity.BodyBuilder status = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        FebsResponse response = new FebsResponse();
-        String message = "认证失败";
-        log.error(message, e);
+        String message = "认证失败：";
+        ResponseEntity.BodyBuilder status = ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+
         if (e instanceof UnsupportedGrantTypeException) {
-            message = "不支持该认证类型";
-            return status.body(response.message(message));
+            message += "不支持该认证类型";
+            status = ResponseEntity.status(HttpStatus.BAD_REQUEST);
         }
-        if (e instanceof InvalidTokenException
+        else if (e instanceof InvalidTokenException
                 && StringUtils.containsIgnoreCase(e.getMessage(), "Invalid refresh token (expired)")) {
-            message = "刷新令牌已过期，请重新登录";
-            return status.body(response.message(message));
+            message += "刷新令牌已过期，请重新登录";
         }
-        if (e instanceof InvalidScopeException) {
-            message = "不是有效的scope值";
-            return status.body(response.message(message));
-        }
-        if (e instanceof RedirectMismatchException) {
-            message = "redirect_uri值不正确";
-            return status.body(response.message(message));
-        }
-        if (e instanceof BadClientCredentialsException) {
-            message = "client值不合法";
-            return status.body(response.message(message));
-        }
-        if (e instanceof UnsupportedResponseTypeException) {
-            String code = StringUtils.substringBetween(e.getMessage(), "[", "]");
-            message = code + "不是合法的response_type值";
-            return status.body(response.message(message));
-        }
-        if (e instanceof InvalidGrantException) {
+        else if (e instanceof InvalidGrantException) {
             if (StringUtils.containsIgnoreCase(e.getMessage(), "Invalid refresh token")) {
-                message = "refresh token无效";
-                return status.body(response.message(message));
+                message += "refresh token无效";
             }
-            if (StringUtils.containsIgnoreCase(e.getMessage(), "Invalid authorization code")) {
+            else if (StringUtils.containsIgnoreCase(e.getMessage(), "Invalid authorization code")) {
                 String code = StringUtils.substringAfterLast(e.getMessage(), ": ");
-                message = "授权码" + code + "不合法";
-                return status.body(response.message(message));
+                message += "授权码" + code + "不合法";
             }
-            if (StringUtils.containsIgnoreCase(e.getMessage(), "locked")) {
-                message = "用户已被锁定，请联系管理员";
-                return status.body(response.message(message));
+            else if (StringUtils.containsIgnoreCase(e.getMessage(), "locked")) {
+                message += "用户已被锁定，请联系管理员";
+                status = ResponseEntity.status(HttpStatus.FORBIDDEN);
             }
-            message = "用户名或密码错误";
-            return status.body(response.message(message));
+            else {
+                message += "用户名或密码错误";
+            }
         }
-        return status.body(response.message(message));
+        else {
+            if (e instanceof InvalidScopeException) {
+                message += "不是有效的scope值";
+            }
+            else if (e instanceof RedirectMismatchException) {
+                message += "redirect_uri值不正确";
+            }
+            else if (e instanceof BadClientCredentialsException) {
+                message += "client值不合法";
+            }
+            else if (e instanceof UnsupportedResponseTypeException) {
+                String code = StringUtils.substringBetween(e.getMessage(), "[", "]");
+                message += code + "不是合法的response_type值";
+            }
+            else {
+                message += "服务器未知错误";
+            }
+            status = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            message += e;
+        }
+
+        log.error(message);
+        return status.body(new FebsResponse().message(message));
     }
 }

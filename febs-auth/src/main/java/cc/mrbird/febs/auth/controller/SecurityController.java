@@ -5,7 +5,9 @@ import cc.mrbird.febs.auth.service.ValidateCodeService;
 import cc.mrbird.febs.common.core.entity.FebsResponse;
 import cc.mrbird.febs.common.core.entity.constant.StringConstant;
 import cc.mrbird.febs.common.core.exception.ValidateCodeException;
+import cc.mrbird.febs.common.core.utils.FebsUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.stereotype.Controller;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.security.Principal;
 
 /**
  * @author MrBird
  */
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class SecurityController {
@@ -36,7 +40,13 @@ public class SecurityController {
     @ResponseBody
     @GetMapping("captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException, ValidateCodeException {
-        validateCodeService.create(request, response);
+        try {
+            validateCodeService.create(request, response);
+        } catch(Exception e) {
+            FebsResponse febsResponse = new FebsResponse();
+            FebsUtil.makeFailureResponse(response, HttpServletResponse.SC_BAD_REQUEST, febsResponse.message(e.getMessage()));
+            log.error(e.getMessage());
+        }
     }
 
     @RequestMapping("login")
