@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:5.7.24
+    image: mysql:8.0.23
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
@@ -11,7 +11,7 @@ services:
     volumes:
       - /febs/mysql/data:/var/lib/mysql #挂载 MySQL数据
   redis:
-    image: redis:4.0.14
+    image: redis:6.2.1
     container_name: redis
     command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
     volumes:

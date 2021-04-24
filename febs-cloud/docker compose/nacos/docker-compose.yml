@@ -2,19 +2,24 @@ version: '3'
 
 services:
   nacos:
-    image: nacos/nacos-server:1.1.4
+    image: nacos/nacos-server:1.4.1
     container_name: nacos-standalone-mysql
     environment:
-      - "PREFER_HOST_MODE=hostname"
       - "MODE=standalone"
       - "SPRING_DATASOURCE_PLATFORM=mysql"
-      - "MYSQL_MASTER_SERVICE_HOST=127.0.0.1"
-      - "MYSQL_MASTER_SERVICE_DB_NAME=febs_nacos"
-      - "MYSQL_MASTER_SERVICE_PORT=3306"
-      - "MYSQL_MASTER_SERVICE_USER=root"
-      - "MYSQL_MASTER_SERVICE_PASSWORD=123456"
-      - "MYSQL_SLAVE_SERVICE_HOST=127.0.0.1"
-      - "MYSQL_SLAVE_SERVICE_PORT=3306"
+      - "MYSQL_SERVICE_HOST=127.0.0.1"
+      - "MYSQL_SERVICE_DB_NAME=febs_nacos"
+      - "MYSQL_SERVICE_PORT=3306"
+      - "MYSQL_SERVICE_USER=root"
+      - "MYSQL_SERVICE_PASSWORD=123456"
+      - "MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai"
+#      - "MYSQL_MASTER_SERVICE_HOST=127.0.0.1"
+#      - "MYSQL_MASTER_SERVICE_DB_NAME=febs_nacos"
+#      - "MYSQL_MASTER_SERVICE_PORT=3306"
+#      - "MYSQL_MASTER_SERVICE_USER=root"
+#      - "MYSQL_MASTER_SERVICE_PASSWORD=123456"
+#      - "MYSQL_SLAVE_SERVICE_HOST=127.0.0.1"
+#      - "MYSQL_SLAVE_SERVICE_PORT=3306"
     volumes:
       - /febs/nacos/standalone-logs/:/home/nacos/logs
       - /febs/nacos/custom.properties:/home/nacos/init.d/custom.properties
