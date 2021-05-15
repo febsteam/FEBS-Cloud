@@ -19,3 +19,15 @@ services:
       - /febs/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf #挂载 Redis配置
     ports:
       - 6379:6379
+  mongodb:
+    image: mongo:4.4.6
+    container_name: mongo_db
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    ports:
+      - "27017-27019:27017-27019"
+    volumes:
+      - /febs/mongo/mongo-volume:/data/db #挂载 Mongo数据
+      - /febs/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro #挂载 Mongo配置

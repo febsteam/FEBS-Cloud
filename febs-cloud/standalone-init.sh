@@ -38,7 +38,7 @@ rm -rf "/febs/alertmanager"
 mkdir -p "/febs/alertmanager"
 cp "/febs/febs-apm/prometheus-grafana/alertmanager.yml" "/febs/alertmanager/alertmanager.yml"
 
-#MySQL Redis配置
+#MySQL Redis MongoDB配置
 echo -e "\n是否清除数据（第一次运行请选Y）？N/y"
 read confirmation
 if [[ ${confirmation} = "y" || ${confirmation} = "Y" ]]
@@ -47,8 +47,10 @@ then
     read tmp2
     rm -rf "/febs/mysql"
     rm -rf "/febs/redis"
-    mkdir -p "/febs/mysql/data" "/febs/redis/data" "/febs/redis/conf"
+    rm -rf "/febs/mongo"
+    mkdir -p "/febs/mysql/data" "/febs/redis/data" "/febs/redis/conf" "/febs/mongo/mongo-volume"
     cp "/febs/febs-cloud/docker compose/third-part/redis.conf" "/febs/redis/conf/redis.conf"
+    cp "/febs/febs-cloud/docker compose/third-part/init-mongo.js" "/febs/mongo/init-mongo.js"
 fi
 
 #nacos配置
@@ -66,7 +68,7 @@ then
 fi
 
 #下载skywalking
-echo -e "\n是否（重新）下载skywalking探针？Y/n"
+echo -e "\n是否（重新）下载skywalking探针(8.5.0)？Y/n"
 read confirmation
 if [[ ${confirmation} != "N" && ${confirmation} != "n" ]]
 then
