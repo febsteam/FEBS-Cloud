@@ -5,22 +5,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author xuefrye
  */
-@ConfigurationProperties(prefix = "febs.log")
+@ConfigurationProperties(prefix = "febs.log.elk")
 public class FebsLogProperties {
     /**
      * 日志上传地址
      */
-    private String logstashHost = "127.0.0.1:4560";
+    private String logstashHost;
 
     /**
      * 是否开启controller层api调用的日志
      */
-    private Boolean enableLogForController = false;
+    private Boolean enableLogForController;
 
     /**
      * 是否开启ELK日志收集
      */
-    private Boolean enableElk = false;
+    private Boolean enable;
 
     public String getLogstashHost() {
         return logstashHost;
@@ -38,11 +38,11 @@ public class FebsLogProperties {
         this.enableLogForController = enableLogForController;
     }
 
-    public Boolean getEnableElk() {
-        return enableElk;
+    public Boolean getEnable() {
+        return enable;
     }
 
-    public void setEnableElk(Boolean enableElk) {
-        this.enableElk = enableElk;
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

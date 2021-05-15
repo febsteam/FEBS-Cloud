@@ -1,4 +1,4 @@
-FROM openjdk:8u212-jre
+FROM openjdk:11.0.10-jre-buster
 MAINTAINER MrBird 852252810@qq.com
 
 COPY ./target/febs-server-system-2.2-RELEASE.jar /febs/febs-server-system-2.2-RELEASE.jar

@@ -114,7 +114,7 @@ public abstract class FebsUtil {
      *
      * @param response    HttpServletResponse
      * @param contentType content-type
-     * @param status      http状态码
+     * @param status      Http状态码
      * @param value       响应内容
      * @throws IOException IOException
      */
@@ -140,11 +140,12 @@ public abstract class FebsUtil {
      * 设置失败响应
      *
      * @param response HttpServletResponse
+     * @param status   http状态码
      * @param value    响应内容
      * @throws IOException IOException
      */
-    public static void makeFailureResponse(HttpServletResponse response, Object value) throws IOException {
-        makeResponse(response, MediaType.APPLICATION_JSON_VALUE, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, value);
+    public static void makeFailureResponse(HttpServletResponse response,int status, Object value) throws IOException {
+        makeResponse(response, MediaType.APPLICATION_JSON_VALUE, status, value);
     }
 
     /**

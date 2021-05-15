@@ -23,6 +23,7 @@ services:
       - "--mongo.url=127.0.0.1"
       - "--nacos.url=127.0.0.1"
       - "--redis.url=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
@@ -38,6 +39,7 @@ services:
       - "--nacos.url=127.0.0.1"
       - "--mysql.url=127.0.0.1"
       - "--redis.url=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
@@ -54,6 +56,7 @@ services:
       - "--nacos.url=127.0.0.1"
       - "--mysql.url=127.0.0.1"
       - "--febs-tx-manager=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
@@ -72,6 +75,7 @@ services:
       - "--mysql.url=127.0.0.1"
       - "--febs-tx-manager=127.0.0.1"
       - "--febs-gateway=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
@@ -89,6 +93,7 @@ services:
       - "--febs-admin=127.0.0.1"
       - "--mysql.url=127.0.0.1"
       - "--febs-gateway=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
@@ -104,6 +109,7 @@ services:
       - "--febs-admin=127.0.0.1"
       - "--mysql.url=127.0.0.1"
       - "--febs-gateway=127.0.0.1"
+      - "--logstash.url=127.0.0.1"
     environment:
       - "TZ=Asia/Shanghai"
     ports:
