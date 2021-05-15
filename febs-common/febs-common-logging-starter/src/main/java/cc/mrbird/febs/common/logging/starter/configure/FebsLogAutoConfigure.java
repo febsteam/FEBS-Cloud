@@ -40,13 +40,13 @@ public class FebsLogAutoConfigure {
         ROOTLOGGER = CONTEXT.getLogger("ROOT");
     }
 
-    @ConditionalOnProperty(name = "febs.log.enable-log-for-controller", havingValue = "true")
+    @ConditionalOnProperty(name = "febs.log.elk.enable-log-for-controller", havingValue = "true")
     @Bean
     public ControllerLogAspect controllerLogAspect(){
         return new ControllerLogAspect();
     }
 
-    @ConditionalOnProperty(name = "febs.log.enable-elk", havingValue = "true")
+    @ConditionalOnProperty(name = "febs.log.elk.enable", havingValue = "true")
     @Bean
     public void enableElk() throws JsonProcessingException {
         LogstashTcpSocketAppender appender = new LogstashTcpSocketAppender();
