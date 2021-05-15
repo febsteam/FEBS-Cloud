@@ -22,7 +22,7 @@ public class FebsAuthExceptionEntryPoint implements AuthenticationEntryPoint {
         String requestUri = request.getRequestURI();
         int status = HttpServletResponse.SC_UNAUTHORIZED;
         String message = "访问令牌不合法";
-        log.error("客户端访问{}请求失败: {}", requestUri, message, authException);
+        log.error("客户端访问{}请求失败: {}", requestUri, message);
         FebsUtil.makeJsonResponse(response, status, new FebsResponse().message(message));
     }
 }
